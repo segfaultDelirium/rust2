@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 
+use substring::Substring;
+use std::fs;
+
 fn main() {
 
 
@@ -8,19 +11,109 @@ fn main() {
     zadanie3();
     zadanie4();
     zadanie5();
-    matrix();
+    // matrix();
     zadanie6();
     zadanie7();
     zadanie8();
+    zadanie9();
+    zadanie10();
+    zadanie11();
+    // zadanie12();
+    // zadanie13();
+    // zadanie14();
+    // zadanie15();
+}
+
+fn zadanie11(){
+    println!("zadanie11");
+
+    let file_content = read_names_from_file();
+    // println!("file content is: \n{file_content}");
+
+    let first_names = file_content.split("\n")
+        .map(|x| x.split(" ").take(1).last().unwrap());
+    for first_name in first_names{
+        println!("{first_name}");
+    }
+
+    // let shorted_first_name = first_names.fold()
+
+}
+
+fn read_names_from_file() -> String{
+    let file_content = match fs::read_to_string("src/names.txt"){
+        Ok(v) => v,
+        Err(e) => {
+            panic!("error reading from file {e}")
+        }
+    };
+    return file_content;
+}
+
+
+fn zadanie10(){
+    println!("zadanie10");
+    let digit_to_word_mapping = create_digit_to_word_mapping();
+
+    // uncomment for user input
+    // let mut user_input = String::new();
+    // std::io::stdin().read_line(&mut user_input).unwrap();
+    // let number_from_user = user_input.trim();
+
+    let number_from_user = "-123456789".to_string();
+
+    let text = number_from_user.chars()
+        .map(|x| {
+            if digit_to_word_mapping.contains_key(&x){
+                return digit_to_word_mapping.get(&x).unwrap().to_string();
+            }
+            panic!("unexpected character: {x}")
+        })
+        .fold(String::new(), |acc, s| concat_with_space(acc, s));
+    println!("your number spelled out: {text}");
+}
+
+fn concat_with_space(s1: String, s2: String) -> String{
+    return concat(concat(s1, " ".to_string()), s2);
+}
+
+fn concat(s1: String, s2: String) -> String{
+    let mut s = s1.clone();
+    s.push_str(&s2);
+    return s;
+}
+
+fn create_digit_to_word_mapping() -> HashMap<char, String>{
+    let mut digit_to_word_mapping: HashMap<char, String> = HashMap::new();
+    digit_to_word_mapping.insert('0', "zero".to_string());
+    digit_to_word_mapping.insert('1', "jeden".to_string());
+    digit_to_word_mapping.insert('2', "dwa".to_string());
+    digit_to_word_mapping.insert('3', "trzy".to_string());
+    digit_to_word_mapping.insert('4', "cztery".to_string());
+    digit_to_word_mapping.insert('5', "pięć".to_string());
+    digit_to_word_mapping.insert('6', "sześć".to_string());
+    digit_to_word_mapping.insert('7', "siedem".to_string());
+    digit_to_word_mapping.insert('8', "osiem".to_string());
+    digit_to_word_mapping.insert('9', "dziewięć".to_string());
+    digit_to_word_mapping.insert('-', "minus".to_string());
+    return digit_to_word_mapping;
 }
 
 fn zadanie9(){
+    println!("zadanie9");
+    for i in 1..16{
+        let power_value = power(i);
+        println!("power of {i} = {power_value}");
+    }
 
+    let power15 = power(15);
+    // power15.to_string().chars().take(3).fold(String::new(), |acc, c|  )
+    println!("first 3 digits of power(15) = {}", power15.to_string().substring(0, 3));
 }
 
-// fn power(){
-
-// }
+fn power(n: i64) -> i64{
+    return (1..(n+1)).fold(1, |acc, x| acc * x)
+}
 
 fn zadanie8(){
     println!("zadanie8");
